@@ -1,0 +1,53 @@
+@model RegisterViewModel
+
+<div class="login-page">
+
+    <partial name="_ValidationSummary" />
+
+    <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">注册</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form asp-route="Register">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label asp-for="Username">用户名</label>
+                                    <input asp-for="Username" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Password">密码</label>
+                                    <input asp-for="Password" class="form-control" type="password"/>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="ConfirmedPassword">确认密码</label>
+                                    <input asp-for="ConfirmedPassword" class="form-control" type="password"/>
+                                </div>
+                                <!--<div class="form-group">
+                                    <label asp-for="Department">部门</label>
+                                    <input asp-for="Department" class="form-control" />
+                                </div>-->
+                                <div class="form-group">
+                                    <label>部门</label>
+                                    <select class="form-control" asp-for="Department">
+                                    @foreach (var dep in Model.Departments)
+                                    {
+                                        <option value=@dep.Id>@dep.Name</option>
+                                    }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" name="button" value="register">注册</button>
+                                    <button class="btn btn-default" name="button" value="cancel">取消</button>
+                                </div>
+
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
