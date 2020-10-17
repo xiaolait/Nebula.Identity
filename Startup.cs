@@ -56,6 +56,52 @@ namespace Nebula.Identity
             var clients = new List<Client>();
             Configuration.GetSection("AuthClients").Bind(clients);
 
+            var clientUrls = new List<string>();
+            for (int i=1; i<=10; i++)
+            {
+                var clientUrl = Configuration[$"ClientUrl{i}"];
+                if (!string.IsNullOrEmpty(clientUrl)) clientUrls.Add(clientUrl);
+            }
+            clients.ForEach(c => {
+                if (c.AllowedGrantTypes.Contains("implicit")) clientUrls.ForEach(url => {
+                    c.RedirectUris.Add($"{url}/CallBack");
+                    c.PostLogoutRedirectUris.Add(url);
+                    c.AllowedCorsOrigins.Add(url);
+                });
+            });
+
+            /*
+            var authClients = new List<AuthClient>();
+            for (int i=0; i<10; i++)
+            {
+                var clientId = Configuration[$"ClientId{i}"];
+                if (string.IsNullOrEmpty(clientId)) continue;
+                var authClient = new AuthClient{
+                    ClientId = clientId,
+                    AllowedGrantTypes = Configuration[$"AllowedGrantTypes{i}"] ?? "password",
+                    ClientUrl = Configuration[$"ClientUrl{i}"],
+                    AccessTokenLifetime = string.IsNullOrEmpty(Configuration[$"AccessTokenLifetime{i}"]) ? 2592000 : int.Parse(Configuration[$"AccessTokenLifetime{i}"])
+                };
+                authClients.Add(authClient);
+            }
+            authClients.ForEach(c => {
+                var client = new Client{
+                    ClientId = c.ClientId,
+                    ClientName = c.ClientId,
+                    AllowedGrantTypes = new string[] { c.AllowedGrantTypes },
+                    AccessTokenLifetime = c.AccessTokenLifetime,
+                    AllowedScopes = new string[]{ "openid", "profile", "api" },
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false
+                };
+                if (!string.IsNullOrEmpty(c.ClientUrl)) {
+                    client.RedirectUris = new string[] {$"{c.ClientUrl}/CallBack"};
+                    client.PostLogoutRedirectUris = new string[] {c.ClientUrl};
+                    client.AllowedCorsOrigins = new string[] {c.ClientUrl};
+                }
+                clients.Add(client);
+            });
+
             /*
             clients.Add(new Client
             {
