@@ -245,13 +245,14 @@ namespace IdentityServer4.Quickstart.UI
                     return View();
                 }
 
-                User user = new User() {UserName = model.Username, DepartmentId = model.Department};
+                User user = new User() {UserName = model.Username/*, DepartmentId = model.Department*/};
                 var rs = await _userManager.CreateAsync(user, model.Password);
                 if (!rs.Succeeded) 
                 {
                     foreach(var error in rs.Errors) ModelState.AddModelError(string.Empty, error.Description);
                     return View();
                 }
+                await _userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.NickName, model.NickName));
                 /*
                 rs = await _userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Name, user.UserName));
                 if (!rs.Succeeded)

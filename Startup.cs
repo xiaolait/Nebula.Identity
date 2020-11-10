@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -129,7 +130,7 @@ namespace Nebula.Identity
                         new IdentityResources.Email(),
                     })
                 .AddInMemoryApiResources(new List<ApiResource> {
-                        new ApiResource("api", "My API 1")
+                        new ApiResource("api", new string[] { JwtClaimTypes.Name, JwtClaimTypes.NickName } )
                     })
                 .AddInMemoryClients(clients)
                 .AddAspNetIdentity<User>();
