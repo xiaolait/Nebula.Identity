@@ -66,7 +66,7 @@ namespace Nebula.Identity
             clients.ForEach(c => {
                 if (c.AllowedGrantTypes.Contains("implicit")) clientUrls.ForEach(url => {
                     c.RedirectUris.Add($"{url}/CallBack");
-                    c.PostLogoutRedirectUris.Add(url);
+                    c.PostLogoutRedirectUris.Add($"{url}/");
                     c.AllowedCorsOrigins.Add(url);
                 });
             });

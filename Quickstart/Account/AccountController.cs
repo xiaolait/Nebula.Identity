@@ -235,10 +235,10 @@ namespace IdentityServer4.Quickstart.UI
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string button)
         {
-            if (!ModelState.IsValid) return View();
-
             if (button == "register")
             {
+                if (!ModelState.IsValid) return View();
+
                 if (model.Password != model.ConfirmedPassword) 
                 {
                     ModelState.AddModelError(string.Empty, "两次输入的密码不一致");
@@ -249,7 +249,11 @@ namespace IdentityServer4.Quickstart.UI
                 var rs = await _userManager.CreateAsync(user, model.Password);
                 if (!rs.Succeeded) 
                 {
-                    foreach(var error in rs.Errors) ModelState.AddModelError(string.Empty, error.Description);
+                    foreach(var error in rs.Errors) {
+                        var description = error.Description;
+                        if (error.Code == "InvalidUserName") description = $"用户名'{model.Username}'无效, 用户名仅能包含字母和数字";
+                        ModelState.AddModelError(string.Empty, description);
+                    }
                     return View();
                 }
                 await _userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.NickName, model.NickName));
