@@ -257,6 +257,7 @@ namespace IdentityServer4.Quickstart.UI
                     return View();
                 }
                 await _userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.NickName, model.NickName));
+                await _userManager.AddClaimAsync(user, new Claim("level", ((int)Level.PUBLIC).ToString()));
                 /*
                 rs = await _userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Name, user.UserName));
                 if (!rs.Succeeded)

@@ -130,7 +130,7 @@ namespace Nebula.Identity
                         new IdentityResources.Email(),
                     })
                 .AddInMemoryApiResources(new List<ApiResource> {
-                        new ApiResource("api", new string[] { JwtClaimTypes.Name, JwtClaimTypes.NickName } )
+                        new ApiResource("api", new string[] { JwtClaimTypes.Name, JwtClaimTypes.NickName, "level" } )
                     })
                 .AddInMemoryClients(clients)
                 .AddAspNetIdentity<User>();
